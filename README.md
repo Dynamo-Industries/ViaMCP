@@ -8,6 +8,8 @@ If you just want to talk or need help with ViaMCP feel free to join my
 [Discord](https://discord.gg/BwWhCHUKDf).
 
 ## Setup
+### For v1.16.4, see [this](https://github.com/Dynamo-Industries/ViaMCP/tree/main/v1.16.4)
+
 Firstly, you will need to add the listed libraries into your dependencies in IntelliJ or Eclipse
 
 Dependencies (Included inside ``libraries`` folder)
