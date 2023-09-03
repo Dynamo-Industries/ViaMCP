@@ -24,19 +24,24 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.settings.SliderPercentageOption;
 import net.minecraft.util.text.StringTextComponent;
 
+import java.util.Collections;
+import java.util.LinkedList;
+
 public class AsyncVersionSlider extends SliderPercentageOption {
     private int x, y, width, height;
 
     public AsyncVersionSlider(int x, int y , int widthIn, int heightIn)
     {
         super("", 0, ViaLoadingBase.getProtocols().size() - 1, 1, (sett) -> {
-            return (double) (ViaLoadingBase.getProtocols().size() - ViaLoadingBase.getInstance().getTargetVersion().getIndex() - 1);
+            return (double) (reverseProtocolIndex(ViaLoadingBase.getInstance().getTargetVersion().getIndex()));
         }, (sett, d) -> {
-            ViaLoadingBase.getInstance().reload(ViaLoadingBase.getProtocols().get((int)(double)d));
+            ViaLoadingBase.getInstance().reload(ViaLoadingBase.getProtocols().get(reverseProtocolIndex((int)(double)d)));
         }, (a, b) -> {
-            return new StringTextComponent(ViaLoadingBase.getProtocols().get((int)b.get(a)).getName());
+            ProtocolVersion version = ViaLoadingBase.getProtocols().get(reverseProtocolIndex((int)b.get(a)));
+            return new StringTextComponent(version.getName());
         });
 
+        Collections.reverse(ViaLoadingBase.getProtocols());
         ViaLoadingBase.getInstance().reload(
                 ProtocolVersion.getProtocol(ViaLoadingBase.getInstance().getNativeVersion())
         );
@@ -49,5 +54,15 @@ public class AsyncVersionSlider extends SliderPercentageOption {
 
     public Widget getButton() {
         return this.createWidget(Minecraft.getInstance().gameSettings, x, y, width);
+    }
+
+    public static LinkedList<ProtocolVersion> getReverseProtocols() {
+        LinkedList<ProtocolVersion> protocols = new LinkedList<>(ViaLoadingBase.getProtocols());
+        Collections.reverse(protocols);
+        return protocols;
+    }
+
+    public static int reverseProtocolIndex(int index) {
+        return getReverseProtocols().size() - 1 - index;
     }
 }
